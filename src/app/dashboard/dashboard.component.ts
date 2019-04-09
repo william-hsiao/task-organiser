@@ -7,64 +7,90 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-  tasks = [
+  lists = [
     {
-      id: 1,
-      repoID: 1,
-      prNumber: 1,
-      title: 'Task 1',
-      status: 'inProgress'
+      name: 'In Progress',
+      tasks: [
+        {
+          id: 1,
+          repoID: 1,
+          prNumber: 1,
+          title: 'Task 1',
+          status: 'inProgress'
+        },
+        {
+          id: 2,
+          repoID: 1,
+          prNumber: 2,
+          title: 'Task 2',
+          status: 'toReview'
+        },
+        {
+          id: 3,
+          repoID: 1,
+          prNumber: 3,
+          title: 'Task 3',
+          status: 'inProgress'
+        },
+        {
+          id: 4,
+          repoID: 1,
+          prNumber: 4,
+          title: 'Task 4',
+          status: 'done'
+        },
+        {
+          id: 5,
+          repoID: 1,
+          prNumber: 5,
+          title: 'Task 5',
+          status: 'inProgress'
+        },
+      ]
     },
     {
-      id: 2,
-      repoID: 1,
-      prNumber: 2,
-      title: 'Task 2',
-      status: 'toReview'
-    },
-    {
-      id: 3,
-      repoID: 1,
-      prNumber: 3,
-      title: 'Task 3',
-      status: 'inProgress'
-    },
-    {
-      id: 4,
-      repoID: 1,
-      prNumber: 4,
-      title: 'Task 4',
-      status: 'done'
-    },
-    {
-      id: 5,
-      repoID: 1,
-      prNumber: 5,
-      title: 'Task 5',
-      status: 'inProgress'
-    },
-  ]
-  toDo = [
-    {
-      id: 6,
-      repoID: 1,
-      prNumber: 6,
-      title: 'Task 6',
-      status: 'inProgress'
-    },
-    {
-      id: 7,
-      repoID: 1,
-      prNumber: 7,
-      title: 'Task 7',
-      status: 'inProgress'
-    },
-    {
-      id: 8,
-      repoID: 1,
-      prNumber: 8,
-      title: 'Task 8',
-      status: 'inProgress'
+      name: 'ToDo',
+      tasks: [
+        {
+          id: 6,
+          repoID: 1,
+          prNumber: 6,
+          title: 'Task 6',
+          status: 'inProgress'
+        },
+        {
+          id: 7,
+          repoID: 1,
+          prNumber: 7,
+          title: 'Task 7',
+          status: 'inProgress'
+        },
+        {
+          id: 8,
+          repoID: 1,
+          prNumber: 8,
+          title: 'Task 8',
+          status: 'inProgress'
+        }
+      ]
+    }, {
+      name: 'Done',
+      tasks: [
+        {
+          id: 9,
+          repoID: 1,
+          prNumber: 9,
+          title: 'Task 9',
+          status: 'inProgress'
+        },
+        {
+          id: 10,
+          repoID: 1,
+          prNumber: 10,
+          title: 'Task 10',
+          status: 'inProgress'
+        },
+      ]
     }
   ]
 
@@ -73,10 +99,11 @@ export class DashboardComponent {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
     }
   }
 }
