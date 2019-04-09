@@ -1,0 +1,21 @@
+:host {
+  background-color: #e1e1e1;
+  flex-grow: 1;
+}
+
+.task-board {
+  display: flex;
+  overflow-x: scroll;
+  height: 100%;
+}
+
+.task-list {
+  margin: 0 20px;
+  width: 250px;
+  background-color: #ffffff;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 100%;
+}

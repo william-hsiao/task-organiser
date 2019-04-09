@@ -1,24 +1,28 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { MainMenuComponent } from './main-menu/main-menu.component';
 
-import { TaskBoardComponent } from './home/task-board.component';
-import { TaskListComponent } from './home/TaskList/task-list.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { TaskListComponent } from './dashboard/task-list/task-list.component';
+import { TaskItemComponent } from './dashboard/task-item/task-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainMenuComponent,
-    TaskBoardComponent,
-    TaskListComponent
+    DashboardComponent,
+    TaskListComponent,
+    TaskItemComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]
