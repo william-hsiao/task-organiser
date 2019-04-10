@@ -1,1 +1,9 @@
-| {{ title }}
+.account
+  .icon
+    .icon-placeholder
+  .text(*ngIf='showExpandedItems')
+    | {{ user.name }}
+.spacer
+.expander((click)='toggleMenu()')
+  div(*ngIf='expandMenu; else closer') <<
+  ng-template(#closer) >>

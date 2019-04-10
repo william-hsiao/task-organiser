@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'main-menu',
@@ -7,4 +7,20 @@ import { Component } from '@angular/core';
 })
 export class MainMenuComponent {
   title = 'task-organiser-angular';
+  user = {
+    name: 'User A'
+  }
+
+  @HostBinding('class.expand') expandMenu: boolean = false;
+  showExpandedItems = false;
+
+  toggleMenu() {
+    if (this.expandMenu) {
+      this.expandMenu = !this.expandMenu;
+      this.showExpandedItems = !this.showExpandedItems;
+    } else {
+      this.expandMenu = !this.expandMenu;
+      setTimeout(() => this.showExpandedItems = !this.showExpandedItems, 300);
+    }
+  }
 }
