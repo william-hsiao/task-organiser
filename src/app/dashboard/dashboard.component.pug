@@ -1,9 +1,15 @@
-div(class='dashboard-title')
+.dashboard-title
   h1 Board Title
-div(class='task-board', cdkDropListGroup)
-  div(class='task-list', *ngFor='let list of lists', [attr.data-list-name]='list.name')
-    div(class='task-list-content')
-      div(class='task-list-header')
+.task-board(cdkDropListGroup)
+  .task-list(*ngFor='let list of lists', [attr.data-list-name]='list.name')
+    .task-list-content
+      .task-list-header
         h2 {{ list.name }}
-      div(class='task-item-container', cdkDropList,(cdkDropListDropped)='drop($event)', [cdkDropListData]='list.tasks')
-        task-item(class='task-item', cdkDrag, *ngFor='let task of list.tasks', [task]='task')
+      .task-item-container(cdkDropList,(cdkDropListDropped)='drop($event)', [cdkDropListData]='list.tasks')
+        .task-item(cdkDrag, *ngFor='let task of list.tasks')
+          //- .placeholder(*cdkDragPlaceholder)
+          p ID: {{ task.id }}
+          p RepoID: {{ task.repoID}}
+          p PR Number: {{ task.prNumber }}
+          p Title: {{ task.title }}
+          p Status: {{ task.status }}
