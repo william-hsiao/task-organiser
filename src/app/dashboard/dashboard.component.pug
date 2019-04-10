@@ -8,8 +8,6 @@
       .task-item-container(cdkDropList,(cdkDropListDropped)='drop($event)', [cdkDropListData]='list.tasks')
         .task-item(cdkDrag, *ngFor='let task of list.tasks')
           //- .placeholder(*cdkDragPlaceholder)
-          p ID: {{ task.id }}
-          p RepoID: {{ task.repoID}}
-          p PR Number: {{ task.prNumber }}
-          p Title: {{ task.title }}
-          p Status: {{ task.status }}
+          div \#{{ task.id }} {{ task.title }}
+          div Repo: {{ task.repoID}} (PR Number: \#{{ task.prNumber }})
+          div Status: {{ task.status }}

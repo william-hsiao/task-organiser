@@ -2,7 +2,7 @@
   align-items: center;
   flex-shrink: 0;
   // border-right: 3px solid #464646;
-  background-color: #363636;
+  background-color: #143879;
   color: #ffffff;
   padding-top: 20px;
   display: flex;
@@ -23,12 +23,16 @@
 
   .icon {
     flex-shrink: 0;
+    border: 2px solid #4f7192;
+    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
     
     .icon-placeholder {
-      width: 50px;
-      height: 50px;
-      border-radius: 15px;
-      background-color: #c8c8c8;
+      height: 100%;
+      width: 100%;
+      background-color: #9ec5ec;
     }
   }
   .text {
@@ -47,7 +51,7 @@
   cursor: pointer;
   padding: 10px;
   width: 100%;
-  background-color: #1b1b1b;
+  background-color: #131c3c;
   display: flex;
   flex-grow: 0;
   flex-shrink: 0;

@@ -1,5 +1,5 @@
 :host {
-  background-color: #e1e1e1;
+  // background-color: #e1e1e1;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -26,9 +26,11 @@
 }
 
 .task-list-content {
+  border: 1px solid #b3b3b3;
   border-radius: 5px;
-  background-color: #ffffff;
-  padding: 0 10px;
+  background-color: #fbfbfb;
+  // padding: 0 10px 10px;
+  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -43,18 +45,20 @@
   flex-direction: column;
   flex-grow: 1;
   overflow-y: auto;
-  padding-right: 5px;
-  padding-bottom: 10px;
+  padding: 0 10px 5px;
+  border-radius: 5px;
 
   &::-webkit-scrollbar-track {
     margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
 .task-item {
-  margin: 10px 0;
+  margin: 5px 0;
+  border: 1px solid #ccc;
   border-radius: 3px;
-  background-color: #d1d1d1;
+  background-color: #ffffff;
   display: block;
   padding: 10px;
 
@@ -66,11 +70,15 @@
     margin-bottom: 0;
   }
 
+  &:hover {
+    box-shadow: 3px 2px #d8d8d8;
+  }
 }
 
 .cdk-drag-placeholder {
   // min-height: 100px;
-  background-color: #b0e6f6;
+  background-color: #dadada;
+  color: #dadada;
 }
 
 // Scrollbar
