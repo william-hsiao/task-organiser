@@ -1,13 +1,46 @@
-.dashboard-title
-  h1 Board Title
+.dashboard-header
+  .title
+    h1 Board Title
+  .add
+    .add-button((click)='toggleModal()') ADD
+
+.modal(*ngIf='showModal')
+  .modal-closer((click)='toggleModal()')
+  .modal-container
+    h3 Add Item
+    | {{ diagnostic }}
+    form.form-container(#taskForm='ngForm', (ngSubmit)='onSubmit()')
+      .field
+        label(for='repo_owner') Repository Owner:
+        input#repo_owner(type='text', [(ngModel)]='formData.repo_owner', #repo_owner='ngModel', name='repo_owner')
+      | {{ formData.repo_owner }}
+      .field
+        label(for='repo_name') Repository Name:
+        input#repo_name(type='text', [(ngModel)]='formData.repo_name', #repo_name='ngModel', name='repo_name')
+      | {{ formData.repo_name }}
+      .field
+        label(for='pr_number') PR Number:
+        input#pr_num(type='number', [(ngModel)]='formData.pr_num', #pr_num='ngModel', name='pr_num')
+      | {{ formData.pr_num }}
+      .field
+        label(for='list_id') List ID:
+        input#list_id(type='number', [(ngModel)]='formData.list_id', #list_id='ngModel', name='list_id')
+      | {{ formData.list_id }}
+      button(type='submit') Submit
+
 .task-board(cdkDropListGroup)
-  .task-list(*ngFor='let list of lists', [attr.data-list-name]='list.name')
+  .task-list(*ngFor='let list of lists')
     .task-list-content
       .task-list-header
         h2 {{ list.name }}
-      .task-item-container(cdkDropList,(cdkDropListDropped)='drop($event)', [cdkDropListData]='list.tasks')
-        .task-item(cdkDrag, *ngFor='let task of list.tasks')
-          //- .placeholder(*cdkDragPlaceholder)
-          div \#{{ task.id }} {{ task.title }}
-          div Repo: {{ task.repoID}} (PR Number: \#{{ task.prNumber }})
-          div Status: {{ task.status }}
+      .task-item-container(cdkDropList,(cdkDropListDropped)='drop($event)', [cdkDropListData]='list.task_records', [attr.data-list-id]='list.id')
+        .task-item(cdkDrag, *ngFor='let record of list.task_records')
+          .header
+            .repo {{ record.task.repository.user.name }}/{{ record.task.repository.name }}
+            .position Assignee
+          .content
+            .title
+              | {{ record.task.title }} | {{ record.githubData.title }}
+              span (\#{{ record.task.pr_number }})
+          .footer
+            | Notification Area

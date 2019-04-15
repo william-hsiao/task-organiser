@@ -8,7 +8,8 @@ import { Component, HostBinding } from '@angular/core';
 export class MainMenuComponent {
   title = 'task-organiser-angular';
   user = {
-    name: 'User A'
+    name: 'Octocat',
+    avatar_url: 'https://avatars3.githubusercontent.com/u/583231?v=4',
   }
 
   @HostBinding('class.expand') expandMenu: boolean = false;

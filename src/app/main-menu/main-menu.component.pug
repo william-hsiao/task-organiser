@@ -1,6 +1,7 @@
 .account
   .icon
-    .icon-placeholder
+    img([src]='user.avatar_url')
+    //- .icon-placeholder
   .text(*ngIf='showExpandedItems')
     | {{ user.name }}
 .spacer

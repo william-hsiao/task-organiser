@@ -62,7 +62,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "task-organiser-angular:build"
+            "browserTarget": "task-organiser-angular:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
