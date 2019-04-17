@@ -6,21 +6,43 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 export class Service {
   constructor(private http: HttpClient) {}
 
+
+  getLists() {
+    return this.http.post('api/user/lists', {
+      username: 'octocat',
+    }, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
   getTasks() {
-    return this.http.get('api/users?login=octocat')
+    return this.http.post('api/user/tasks', {
+      username: 'octocat',
+    }, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
   }
 
   createTask(data) {
-    console.log(data);
+    // console.log(data);
     return this.http.post('api/records', data, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
-    })
+    });
   }
 
-  updateTask(task, listId, previousListId) {
-    console.log(task, listId, previousListId);
+  updateTask(data) {
+    console.log(data);
+    return this.http.post('api/user/tasks/move', data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
   }
 
   getPulls() {

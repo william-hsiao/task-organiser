@@ -29,7 +29,7 @@
       button(type='submit') Submit
 
 .task-board(cdkDropListGroup)
-  .task-list(*ngFor='let list of lists')
+  .task-list(*ngFor='let list of processedLists')
     .task-list-content
       .task-list-header
         h2 {{ list.name }}
@@ -40,7 +40,9 @@
             .position Assignee
           .content
             .title
-              | {{ record.task.title }} | {{ record.githubData.title }}
-              span (\#{{ record.task.pr_number }})
+              span(*ngIf='record.task.title !== ""') {{ record.task.title }} | 
+              span(*ngIf='record.githubData') {{ record.githubData.title }}
+              span.prNum (\#{{ record.task.pr_number }})
           .footer
             | Notification Area
+            | {{ record.index }}
