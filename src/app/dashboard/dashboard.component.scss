@@ -90,6 +90,9 @@
 
 .task-list-header {
   padding: 0 15px;
+  margin-bottom: 10px;
+  background-color: #e8e8e8;
+  border-bottom: 1px solid #b3b3b3;
   h2 {
     font-size: 16px;
   }
@@ -173,6 +176,22 @@
     }
 
     .title {
+      .stateIndicator {
+        width: 8px;
+        height: 8px;
+        margin-right: 5px;
+        border-radius: 4px;
+        &.open {
+          background-color: #00aa00;
+        }
+        &.closed {
+          background-color: #aa0000;
+        }
+        &.merged {
+          background-color: #aa00aa;
+        }
+      }
+
       span.prNum {
         margin-left: 5px;
         color: #8b8b8b;
@@ -205,21 +224,21 @@
 
 // Scrollbar
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
   margin: 10px;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 /* Handle on hover */

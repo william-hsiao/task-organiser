@@ -45,6 +45,15 @@ export class Service {
     });
   }
 
+  archiveTask(data) {
+    console.log('archive req:', data)
+    return this.http.post('api/user/tasks/archive', data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
   getPulls() {
     return this.http.get('https://api.github.com/repos/octocat/hello-world/pulls')
   }

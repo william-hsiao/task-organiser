@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Service } from '../dashboard.services';
 import { forkJoin } from 'rxjs';
+
+import { taskRecord } from '../taskRecord';
+import { githubDataManager } from '../githubDataManager';
+import { githubPullRequest } from '../githubPullRequest';
 
 @Component({
   selector: 'dashboard',
@@ -11,7 +15,7 @@ import { forkJoin } from 'rxjs';
 
 export class DashboardComponent {
   private lists;
-  private tasks;
+  private taskRecords = [];
   private processedLists;
   private showModal;
   private formData = {
@@ -21,58 +25,55 @@ export class DashboardComponent {
     'pr_num': 1,
     'list_id': 1,
   };
-  private githubData = {};
+  private githubData = new githubDataManager();
+
+  private owner = 'octocat';
+  private repo = 'hello-world';
 
   constructor(
     private service: Service,
-  ) {
+    ) {
+    this.showModal = false;
+
     this.service.getLists().subscribe(data => {
       this.lists = data;
 
       let internalTasks = this.service.getTasks();
       let githubAPI = this.service.getPulls();
       forkJoin([internalTasks, githubAPI]).subscribe(data => {
-        this.tasks = data[0];
-  
-        Object.keys(data[1]).forEach(pr => {
-          if (!this.githubData['octocat']) this.githubData['octocat'] = {};
-          if (!this.githubData['octocat']['hello-world']) this.githubData['octocat']['hello-world'] = [];
-          this.githubData['octocat']['hello-world'].push({
-            pr_num: data[1][pr].number,
-            title: data[1][pr].title,
-          });
+        Object.keys(data[0]).forEach(record => {
+          this.taskRecords.push(new taskRecord(data[0][record]));
         });
+        // console.log('Task Records', this.taskRecords);
   
-        this.tasks.forEach(record => {
-          try {
-            const ghData = this.githubData[record.task.repository.user.name][record.task.repository.name];
-            const tmp = ghData.find(rec => rec.pr_num === record.task.pr_number);
-            if (!tmp) return;
-            // console.log('Found', tmp);
-            record.githubData = tmp;
-            ghData.splice(ghData.indexOf(tmp), 1);
-          } catch (e) {
-            // console.log('not found');
-          }
+        Object.keys(data[1]).forEach(pr => 
+          this.githubData.addPullRequest(
+            new githubPullRequest(this.owner, this.repo, data[1][pr])
+          ));
+        // console.log('GitHub Data', this.githubData);
+  
+        this.taskRecords.forEach(record => {
+          const ghPullReq = this.githubData.extractPullRequest(
+            record.repositoryOwner,
+            record.repositoryName,
+            record.pullRequestNumber
+          );
+          if (ghPullReq) record.pullRequest = ghPullReq;
         })
   
-        // console.log('Lists: ', this.lists)
-        // console.log('Tasks: ', this.tasks);
-        // console.log('GitHub Data: ', this.githubData);
-  
-        Object.keys(this.githubData).forEach(user => {
-          Object.keys(this.githubData[user]).forEach(repo => {
-            this.githubData[user][repo].forEach(pr => {
+        Object.keys(this.githubData.pullRequests).forEach(user => {
+          Object.keys(this.githubData.pullRequests[user]).forEach(repo => {
+            this.githubData.pullRequests[user][repo].forEach(pullReq => {
               this.service.createTask({
                 'username': 'octocat',
                 'repo_owner': user,
                 'repo_name': repo,
-                'pr_num': pr.pr_num,
+                'pr_num': pullReq.number,
                 'list_id': Math.floor(Math.random() * 3 + 1),
-              }).subscribe(dta  => {
-                console.log(dta);
-                dta['githubData'] = pr;
-                this.tasks.push(dta)
+              }).subscribe((record: { [key: string]: any }) => {
+                const newRecord = new taskRecord(record)
+                newRecord.pullRequest = pullReq;
+                this.taskRecords.push(newRecord);
                 this.sortTaskIntoLists();
               });
             });
@@ -81,10 +82,6 @@ export class DashboardComponent {
         this.sortTaskIntoLists();
       })
     });
-
-    // this.lists = this.service.getBoards();
-    this.showModal = false;
-    // console.log(this.sortedLists)
   }
 
   toggleModal() {
@@ -95,7 +92,7 @@ export class DashboardComponent {
 
   sortTaskIntoLists() {
     this.processedLists = this.lists.map(list => {
-      list.task_records = this.tasks.filter(task => task.list_id === list.id).sort((a, b) => a.index - b.index );
+      list.taskRecords = this.taskRecords.filter(record => record.listId === list.id).sort((a, b) => a.index - b.index );
       return list;
     })
     console.log(this.processedLists)
@@ -106,11 +103,13 @@ export class DashboardComponent {
 
     const destinationListId = parseInt(event.container.element.nativeElement.getAttribute('data-list-id'), 10);
 
-    const targetTask = this.tasks.find(task => task.id === event.previousContainer.data[event.previousIndex].id);
+    const targetTask = this.taskRecords.find(task => task.id === event.previousContainer.data[event.previousIndex].id);
     const initialIndex = event.previousContainer.data[event.previousIndex].index;
 
     let destinationIndex;
-    if (event.currentIndex >= event.container.data.length) {
+    if (event.container.data.length === 0) {
+      destinationIndex = initialIndex;
+    } else if (event.currentIndex >= event.container.data.length) {
       destinationIndex = event.container.data[event.container.data.length - 1].index + 1;
     } else {
       destinationIndex = event.container.data[event.currentIndex].index;
@@ -118,11 +117,11 @@ export class DashboardComponent {
 
     console.log(initialIndex, destinationIndex);
     if (initialIndex < destinationIndex) { // Moving down the list
-      this.tasks.forEach(task => {
+      this.taskRecords.forEach(task => {
         if (task.index > initialIndex && task.index <= destinationIndex) task.index--;
       })
     } else if (initialIndex > destinationIndex) {
-      this.tasks.forEach(task => {
+      this.taskRecords.forEach(task => {
         if (task.index >= destinationIndex && task.index < initialIndex) task.index++;
       })
     }
@@ -149,5 +148,16 @@ export class DashboardComponent {
       this.lists.find(list => list.id === this.formData.list_id).task_records.push(data)
       this.showModal = false;
     });
+  }
+
+  archiveTask(taskId) {
+    // this.service.archiveTask({
+    //   username: 'octocat',
+    //   taskId,
+    // }).subscribe(data => {
+    //   const targetTask = this.tasks.find(task => task.id === taskId);
+    //   this.tasks.splice(this.tasks.indexOf(targetTask), 1);
+    //   this.sortTaskIntoLists();
+    // })
   }
 }

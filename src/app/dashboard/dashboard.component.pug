@@ -33,16 +33,17 @@
     .task-list-content
       .task-list-header
         h2 {{ list.name }}
-      .task-item-container(cdkDropList,(cdkDropListDropped)='drop($event)', [cdkDropListData]='list.task_records', [attr.data-list-id]='list.id')
-        .task-item(cdkDrag, *ngFor='let record of list.task_records')
+      .task-item-container(cdkDropList,(cdkDropListDropped)='drop($event)', [cdkDropListData]='list.taskRecords', [attr.data-list-id]='list.id')
+        .task-item(cdkDrag, *ngFor='let record of list.taskRecords')
           .header
-            .repo {{ record.task.repository.user.name }}/{{ record.task.repository.name }}
+            .repo {{ record.repoTitle }}
             .position Assignee
           .content
             .title
-              span(*ngIf='record.task.title !== ""') {{ record.task.title }} | 
-              span(*ngIf='record.githubData') {{ record.githubData.title }}
-              span.prNum (\#{{ record.task.pr_number }})
+              .stateIndicator([ngClass]="record.pullReq.state")
+              | {{ record.displayTitle }}
+              span.prNum (\#{{ record.pullRequestNumber }})
           .footer
             | Notification Area
             | {{ record.index }}
+            span((click)='archiveTask(record.id)') Archive
